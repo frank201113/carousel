@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>腾讯微云首页jquery焦点图</title>
+
+<style type="text/css">
+*{margin:0;padding:0;list-style-type:none;}
+a,img{border:0;}
+body{font:12px/180% Arial, Helvetica, sans-serif, "新宋体";}
+</style>
+
+<link rel="stylesheet" href="css/wy-mod-banner.css" media="screen">
+
+<!--[if IE 6]><script type="text/javascript">try{document.execCommand('BackgroundImageCache',false,true);}catch(e){}</script><![endif]-->
+
+</head>
+<body>
+
+<div class="wy-mod-banner" style="overflow:hidden;">
+	
+	<div id="_banners" class="banners">
+		<div class="banner banner4">
+			<img width="1600" height="680" src="images/banner4.jpg" alt="微云，生活精彩" />
+			<div class="info">
+				<h3>微云，生活精彩</h3>
+				<p>收录生活中的点点滴滴，精彩从此刻开始！</p>
+				<a href="http://www.17sucai.com/" class="link-download"><span>马上下载 </span><i class="bor_c"></i></a>
+			</div>
+		</div>
+		<div class="banner banner3">
+			<img width="1600" height="680" src="images/banner3.jpg" alt="微云，生活精彩" />
+			<div class="info">
+				<h3>微云，生活精彩</h3>
+				<p>收录生活中的点点滴滴，精彩从此刻开始！</p>
+				<a href="http://www.17sucai.com/" class="link-download"><span>马上下载 </span><i class="bor_c"></i></a>
+			</div>
+		</div>
+		<div class="banner banner2">
+			<img width="1600" height="680" src="images/banner2.jpg" alt="微云，生活精彩" />
+			<div class="info">
+				<h3>微云，生活精彩</h3>
+				<p>收录生活中的点点滴滴，精彩从此刻开始！</p>
+				<a href="http://www.17sucai.com/" class="link-download"><span>马上下载 </span><i class="bor_c"></i></a>
+			</div>
+		</div>
+		<div class="banner banner1">
+			<img width="1600" height="680" src="images/banner1.jpg" alt="微云，生活精彩" />
+			<div class="info">
+				<h3>微云，生活精彩</h3>
+				<p>收录生活中的点点滴滴，精彩从此刻开始！</p>
+				<a href="http://www.17sucai.com/" class="link-download"><span>马上下载</span> <i class="bor_c"></i></a>
+			</div>
+		</div>
+	</div>
+	
+	  <div id="_focus" class="focus">
+	  	<a data-index="0" href="javascript:void(0);" class="on"><span class="bg-b"></span><span class="inner"></span></a>
+		<a data-index="1" href="javascript:void(0);"><span class="bg-b"></span><span class="inner"></span></a>
+		<a data-index="2" href="javascript:void(0);"><span class="bg-b"></span><span class="inner"></span></a>
+		<a data-index="3" href="javascript:void(0);"><span class="bg-b"></span><span class="inner"></span></a>
+	</div>
+</div>
+
+<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript">
+var glume = function(banners_id, focus_id){
+	this.$ctn = $('#' + banners_id);
+	this.$focus = $('#' + focus_id);
+	this.$adLis = null;
+	this.$btns = null;
+	this.switchSpeed = 5;//自动播放间隔(s)
+	this.defOpacity = 1;
+	this.crtIndex = 0;
+	this.adLength = 0;
+	this.timerSwitch = null;
+	this.init();
+};
+glume.prototype = {
+	fnNextIndex:function(){
+		return (this.crtIndex >= this.adLength-1)?0:this.crtIndex+1;
+	},
+	//动画切换
+	fnSwitch:function(toIndex){
+		if(this.crtIndex==toIndex){return;}
+		this.$adLis.css('zIndex', 0);
+		this.$adLis.filter(':eq('+this.crtIndex+')').css('zIndex', 2);
+		this.$adLis.filter(':eq('+toIndex+')').css('zIndex', 1);
+		this.$btns.removeClass('on');
+		this.$btns.filter(':eq('+toIndex+')').addClass('on');
+		var me = this;
+
+		$(this.$adLis[this.crtIndex]).animate({
+			opacity: 0
+		}, 1000, function() {
+			me.crtIndex = toIndex;
+			$(this).css({
+				opacity: me.defOpacity,
+				zIndex: 0
+			});
+		});
+	},
+	fnAutoPlay:function(){
+		this.fnSwitch(this.fnNextIndex());
+	},
+	fnPlay:function(){
+		var me = this;
+		me.timerSwitch = window.setInterval(function() {
+			me.fnAutoPlay();
+		},me.switchSpeed*1000);
+	},
+	fnStopPlay:function(){
+		window.clearTimeout(this.timerSwitch);
+		this.timerSwitch = null;
+	},
+
+	init:function(){
+		this.$adLis = this.$ctn.children();
+		this.$btns = this.$focus.children();
+		this.adLength = this.$adLis.length;
+
+		var me = this;
+		//点击切换
+		this.$focus.on('click', 'a', function(e) {
+			e.preventDefault();
+			var index = parseInt($(this).attr('data-index'), 10)
+			me.fnSwitch(index);
+		});
+		this.$adLis.filter(':eq('+ this.crtIndex +')').css('zIndex', 2);
+		this.fnPlay();
+
+		//hover时暂停动画
+		this.$ctn.hover(function() {
+			me.fnStopPlay();
+		}, function() {
+			me.fnPlay();
+		});
+
+		if($.browser.msie && $.browser.version < 7) {
+			this.$btns.hover(function() {
+				$(this).addClass('hover');
+			},function() {
+				$(this).removeClass('hover');
+			});
+		}
+	}
+};
+var player1 = new glume('_banners', '_focus');    
+</script>
+	
+</body>
+</html>
