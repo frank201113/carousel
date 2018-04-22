@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+    <style type="text/css">
+		.out {
+			background: #106B94;
+		}
+    </style>    	
+</head>
+<body>
+<div class="out">
+	<svg viewBox="0 0 100 100" style="width: 13px; margin-top: 1.5px;">
+		<path d="M 50,50 m 0,-45 a 45,45 0 1 1 0,90 a 45,45 0 1 1 0,-90"
+			  stroke="rgba(255,255,255,0.2)" 
+			  stroke-width="10" 
+			  fill-opacity="0">
+		</path>
+		<path id="circle" 
+			  d="M 50,50 m 0,-45 a 45,45 0 1 1 0,90 a 45,45 0 1 1 0,-90" 
+		      stroke="#fff" 
+		      stroke-width="10" 
+		      fill-opacity="0" 
+		      style="stroke-dasharray: 282.783, 282.783; stroke-dashoffset: 282.783;" 
+		      data-spm-anchor-id="5176.8142029.759393.i2.a7236d3ebbz3rU">
+		</path>
+	</svg>
+</div>
+<p></p>
+<div class="out">
+	<svg viewBox="0 0 100 100" style="width: 13px; margin-top: 1.5px;">
+		<path d="M 50,50 m 0,-45 a 45,45 0 1 1 0,90 a 45,45 0 1 1 0,-90" 
+			  stroke="rgba(255,255,255,0.2)" 
+			  stroke-width="10" 
+			  fill-opacity="0">
+		</path>
+		<path d="M 50,50 m 0,-45 a 45,45 0 1 1 0,90 a 45,45 0 1 1 0,-90" 
+			  stroke="#fff" 
+			  stroke-width="10" 
+			  fill-opacity="0" 
+			  style="stroke-dasharray: 282.783, 282.783; stroke-dashoffset: 0;" 
+			  data-spm-anchor-id="5176.8142029.759393.i1.a7236d3ebbz3rU">
+		</path>
+	</svg>
+</div>
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+<script type="text/javascript">
+var circle = $('#circle');
+console.log(circle);
+var offSet = circle.css('stroke-dashoffset');
+console.log(offSet);
+var offSetNum = parseInt(offSet);
+console.log(offSetNum);
+// function changeCircle(num, c) {
+// 	num = num - 1;
+// 	num = num + 'px';
+// 	c.css('stroke-dashoffset', num);
+// 	console.log(num);
+// }
+
+// var lightCircle = self.setInterval("changeCircle(offSetNum, circle)", 500);
+
+function changeCircle() {
+	console.log(this.offSetNum);
+	this.offSetNum = this.offSetNum - 10;
+	var tempStr = this.offSetNum + 'px';
+	console.log(this.offSetNum);
+	console.log(tempStr);
+	this.circle.css('stroke-dashoffset', tempStr);
+}
+self.setInterval("changeCircle()", 500);
+// changeCircle()
+</script>
+</body>
+</html>
